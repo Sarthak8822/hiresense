@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: api
   datasource:
@@ -29,6 +31,11 @@ app:
     frontend-origin: http://localhost:3000
   jwt:
     issuer: hiresense
-    secret: change-this-in-.env
+    secret: ${JWT_SECRET}
     expiryMinutes: 60
+  s3:
+    bucket: hiresense
+    endpoint: http://localhost:9000
+    accessKey: ${MINIO_USERID}
+    secretKey: ${MINIO_PASSWORD}
 

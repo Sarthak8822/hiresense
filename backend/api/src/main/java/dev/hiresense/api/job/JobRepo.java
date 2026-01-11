@@ -1,4 +1,6 @@
 package dev.hiresense.api.job;
 
-public class JobRepo {
-}
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
+
+public interface JobRepo extends JpaRepository<Job, UUID> {}

@@ -1,14 +1,14 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS vector; -- requires pgvector image
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users(
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE TABLE resumes (
+CREATE TABLE IF NOT EXISTS resumes (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   title TEXT,
@@ -17,23 +17,26 @@ CREATE TABLE resumes (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE TABLE resume_embeddings (
+CREATE TABLE IF NOT EXISTS resume_embeddings (
   resume_id UUID PRIMARY KEY REFERENCES resumes(id) ON DELETE CASCADE,
   model TEXT NOT NULL,
   vector VECTOR(1536) NOT NULL
 );
 
-CREATE TABLE jobs (
+CREATE TABLE IF NOT EXISTS jobs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  company TEXT, title TEXT, location TEXT,
-  source_url TEXT, jd_text TEXT,
+  company TEXT,
+  title TEXT,
+  location TEXT,
+  source_url TEXT,
+  jd_text TEXT,
   seniority TEXT,
   salary_min INT, salary_max INT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE TABLE job_embeddings (
+CREATE TABLE IF NOT EXISTS job_embeddings (
   job_id UUID PRIMARY KEY REFERENCES jobs(id) ON DELETE CASCADE,
   model TEXT NOT NULL,
   vector VECTOR(1536) NOT NULL
